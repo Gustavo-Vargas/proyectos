@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+{% block contenido %}
+
+
+    <h1>Lista de artículos</h1>
+    <a href="{% url 'nuevo_articulo' %}">Nuevo Articulo</a>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Stock</th>
+                <th>Genero</th>
+                <th>Categoria</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in articulos%}
+                <tr>
+                    <td>{{articulo.nombre}}</td>
+                    <td>
+                        {% if articulo in articulos%}
+                            {{articulo.description}}
+                        {% else %}
+                            No cuenta con Descripción
+                        {% endif %}
+                    </td>
+                    <td>{{articulo.stock}}</td>
+                    <td>{{articulo.genero}}</td>
+                    <td>{{articulo.categoria.nombre}}</td>
+                    <td>
+                        <a href="{% url 'editar_articulos' articulo.id %}">Editar</a>
+                        <a href="{% url 'eliminar_articulos' articulo.id %}">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <p>No existen artículos registrados</p>
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock contenido %}
+
