@@ -1,5 +1,6 @@
 from django import forms
 from articulos.models import Articulos
+from articulos.models import Categoria
 
 class FormArticulo(forms.ModelForm):
     class Meta:
@@ -9,5 +10,7 @@ class FormArticulo(forms.ModelForm):
         # exclude = 'stock'
     
 
-# class FormEjemplo(forms.Form):
-#     pass 
+class FormCategoria(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = '__all__'

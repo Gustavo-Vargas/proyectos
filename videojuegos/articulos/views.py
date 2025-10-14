@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from articulos.models import Articulos
-from articulos.forms import FormArticulo
+from articulos.models import Articulos, Categoria
+from articulos.forms import FormArticulo, FormCategoria
 
 def lista_articulos(request):
     articulos = Articulos.objects.all()
@@ -35,3 +35,38 @@ def editar_articulos(request, id):
         form = FormArticulo(instance=articulo)
     return render(request, 'editar_articulo.html', {'form':form})
     
+
+def lista_categorias(request):
+    categorias = Categoria.objects.all()
+
+    return render(request, 'categorias.html',
+    {'categorias': categorias})
+
+def eliminar_categoria(request, id):
+    Categoria.objects.get(id=id).delete()
+    return redirect('categorias_lista')
+
+def nueva_categoria(request):
+    if request.method == 'POST':
+        form = FormCategoria(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('categorias_lista')
+
+    else:
+        form = FormCategoria()
+    return render(request, 'nueva_categoria.html',
+    {'form': form})
+
+def editar_categoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    if request.method == 'POST':
+        form = FormCategoria(request.POST,
+        instance=categoria)
+        if form.is_valid():
+            form.save()
+            return redirect('categorias_lista')
+    else: 
+        form = FormCategoria(instance=categoria)
+    return render(request, 'editar_categoria.html', {'form':form}) 
+        

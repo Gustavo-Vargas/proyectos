@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block contenido %}
 
-<h1>Modificar articulo</h1>
+<h1>Modificar Categoria</h1>
 <form method="POST">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Guardar">
-    <a href="{% url 'articulos_lista' %}">Regresar</a>
+    <a href="{% url 'categorias_lista' %}">Regresar</a>
 </form> 
 
 {% endblock contenido %}
