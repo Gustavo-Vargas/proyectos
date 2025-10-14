@@ -4,7 +4,11 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE | Dashboard v3</title>
+    <title>
+      {% block title %}
+        Videojuego V1
+      {% endblock title %}
+    </title>
 
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
     
@@ -16,7 +20,7 @@
     <!--end::Accessibility Meta Tags-->
 
     <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE | Dashboard v3" />
+    <meta name="title" content="Videojuego V1" />
     <meta name="author" content="ColorlibHQ" />
     <meta
       name="description"
@@ -731,6 +735,10 @@
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{% static './js/adminlte.js' %}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+    {% block scripts %}
+
+    {% endblock scripts %}
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
