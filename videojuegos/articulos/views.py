@@ -3,8 +3,13 @@ from articulos.models import Articulos, Categoria
 from articulos.forms import FormArticulo, FormCategoria
 
 def lista_articulos(request):
-    articulos = Articulos.objects.all()
-    
+    # articulos = Articulos.objects.all()
+    # articulos = Articulos.objects.order_by('-stock','nombre')
+    articulos = Articulos.objects.filter(categoria__nombre='Aventura')
+    print(articulos.query)
+    len(articulos)
+    Articulos.objects.count()
+
     return render(request, 'articulos.html', {'articulos': articulos})
 
 def eliminar_articulos(request, id):
@@ -43,8 +48,16 @@ def lista_categorias(request):
     {'categorias': categorias})
 
 def eliminar_categoria(request, id):
-    Categoria.objects.get(id=id).delete()
-    return redirect('categorias_lista')
+    # context = {}
+    # categoria = Categoria.objects.get(categoria=categoria)
+    # articulos = Articulos.objects.filter(categoria=categorias)
+    # if articulos: 
+    # else: 
+    # try: 
+        Categoria.objects.get(id=id).delete()
+    # except:
+    #     context['mensaje'] = 'No se puede eliminar la categoria porque tiene articulos'
+        return redirect('categorias_lista')
 
 def nueva_categoria(request):
     if request.method == 'POST':
