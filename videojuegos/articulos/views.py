@@ -5,7 +5,7 @@ from articulos.forms import FormArticulo, FormCategoria
 def lista_articulos(request):
     # articulos = Articulos.objects.all()
     # articulos = Articulos.objects.order_by('-stock','nombre')
-    articulos = Articulos.objects.filter(categoria__nombre='Aventura')
+    articulos = Articulos.objects.filter(genero='1')
     print(articulos.query)
     len(articulos)
     Articulos.objects.count()

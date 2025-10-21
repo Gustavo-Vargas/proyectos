@@ -18,7 +18,7 @@ class Articulos(models.Model):
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.CharField('Descripcion', max_length=100, null=True, blank=True)
+    descripcion = models.TextField('Descripcion', max_length=100, null=True, blank=True)
     
     def __str__(self):
         return self.nombre
