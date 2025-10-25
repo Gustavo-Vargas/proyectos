@@ -7,7 +7,9 @@ from django.core.paginator import Paginator
 from articulos.models import Articulos, Categoria
 from articulos.forms import FormArticulo, FormCategoria
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 
+@permission_required('add_articulos')
 def lista_articulos(request):
     articulos_list = Articulos.objects.all()
        # articulos = Articulos.objects.order_by('-stock','nombre')

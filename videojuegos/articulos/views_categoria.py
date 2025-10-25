@@ -7,7 +7,7 @@ from articulos.forms import FormCategoria
 from articulos.models import Categoria, Articulos
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ListaCategorias(ListView):
@@ -54,7 +54,7 @@ class EliminarCategoriaView(DeleteView):
             success_url = self.get_success_url()
             return HttpResponseRedirect(success_url)
 
-class BienvenidaView(TemplateView):
+class BienvenidaView(LoginRequiredMixin,TemplateView):
     template_name = 'bienvenida.html'
 
 
