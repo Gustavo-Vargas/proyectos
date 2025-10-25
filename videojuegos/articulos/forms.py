@@ -18,7 +18,19 @@ class FormArticulo(forms.ModelForm):
         }
 
 
+# class FormCategoria(forms.ModelForm):
+#     class Meta:
+#         model = Categoria
+#         fields = '__all__'
+
 class FormCategoria(forms.ModelForm):
     class Meta:
         model = Categoria
+        # fields = ['nombre','genero','stock']
         fields = '__all__'
+        # exclude = 'stock'
+
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }

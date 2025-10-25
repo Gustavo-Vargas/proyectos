@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 {%block titulo%}
     Bienvenido al sistema de videojuegos
-{%endblock%}
+{% endblock titulo %}
+
+{% block page_title %}
+    Dashboard
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">Home</li>
+{% endblock breadcrumb %}
 
 {% block contenido %}
     <h1>Bienvenido al Sistema</h1>

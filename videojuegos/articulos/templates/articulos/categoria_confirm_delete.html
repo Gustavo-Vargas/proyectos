@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Eliminar Categoría
+{% endblock titulo %}
+
+{% block page_title %}
+    Eliminar Categoría
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'categorias_lista' %}">Categorías</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Eliminar Categoría</li>
+{% endblock breadcrumb %}
+
+{% block contenido %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Confirmar Eliminación</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form">
+                {% csrf_token %}
+                <p>¿Deseas eliminar la categoría <b>"{{ object }}"</b>?</p>
+                <div class="form-group">
+                    <input type="submit" value="Eliminar" class="btn btn-danger">
+                    <a href="{% url 'categorias_lista' %}" class="btn btn-secondary">Regresar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock contenido %}

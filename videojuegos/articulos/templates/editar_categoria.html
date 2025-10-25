@@ -1,7 +1,24 @@
 {% extends 'base.html' %}
-{% block contenido %}
 
-<h1>Modificar Categoria</h1>
+{% block titulo %}
+    Editar Categoría
+{% endblock titulo %}
+
+{% block contenido %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="alert alert-danger">
+                    {{message}}
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+<h1>Editar Categoría</h1>
 <form method="POST">
     {% csrf_token %}
     {{form.as_p}}

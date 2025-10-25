@@ -5,9 +5,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>
-      {% block title %}
+      {% block titulo %}
         Videojuego V1
-      {% endblock title %}
+      {% endblock titulo %}
     </title>
 
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
@@ -247,7 +247,7 @@
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline">{{request.user.first_name}} {{request.user.last_name}}</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
@@ -283,7 +283,11 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                  
+                  <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default btn-flat float-end">Salir</button>
+                  </form>
                 </li>
                 <!--end::Menu Footer-->
               </ul>
@@ -660,12 +664,18 @@
             <!--begin::Row-->
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Dashboard v3</h3>
+                <h3 class="mb-0">
+                  {% block page_title %}
+                    Dashboard v3
+                  {% endblock page_title %}
+                </h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Dashboard v3</li>
+                  {% block breadcrumb %}
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard v3</li>
+                  {% endblock breadcrumb %}
                 </ol>
               </div>
             </div>
