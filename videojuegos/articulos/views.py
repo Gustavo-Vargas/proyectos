@@ -3,17 +3,19 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 from articulos.models import Articulos, Categoria
 from articulos.forms import FormArticulo, FormCategoria
 from django.contrib import messages
 
 def lista_articulos(request):
-    articulos = Articulos.objects.all()
-    # articulos = Articulos.objects.order_by('-stock','nombre')
+    articulos_list = Articulos.objects.all()
+       # articulos = Articulos.objects.order_by('-stock','nombre')
     # articulos = Articulos.objects.filter(genero='1')
-    print(articulos.query)
-    len(articulos)
-    Articulos.objects.count()
+    
+    paginator = Paginator(articulos_list, 5)
+    page_number = request.GET.get('page')
+    articulos = paginator.get_page(page_number)
 
     return render(request, 'articulos.html', {'articulos': articulos})
 

@@ -12,7 +12,9 @@ from django.http import HttpResponseRedirect
 
 class ListaCategorias(ListView):
     model = Categoria
-    # queryset = Categoria.objects.order_by('nombre')
+    paginate_by = 5
+    template_name = 'articulos/categoria_list.html'
+    context_object_name = 'object_list'
 
 
 class NuevaCategoriaView(CreateView):
