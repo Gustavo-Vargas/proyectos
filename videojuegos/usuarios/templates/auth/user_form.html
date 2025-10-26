@@ -89,7 +89,7 @@
             {% csrf_token %}
             <div class="input-group mb-1">
               <div class="form-floating">
-                <input type="text" class="form-control" placeholder="" name="username"/>
+                <input type="text" class="form-control" placeholder="" name="username" value="{{form.username.value|default:''}}"/>
                 <label for="registerFullName">Nombre de usuario</label>
               </div>
               <div class="input-group-text">
@@ -99,7 +99,7 @@
 
             <div class="input-group mb-1">
               <div class="form-floating">
-                <input type="email" class="form-control" placeholder="" name="email"/>
+                <input type="email" class="form-control" placeholder="" name="email" value="{{form.email.value|default:''}}"/>
                 <label for="registerEmail">Correo Electrónico</label>
               </div>
               <div class="input-group-text">
@@ -108,7 +108,7 @@
             </div>
             <div class="input-group mb-1">
               <div class="form-floating">
-                <input type="password" class="form-control" placeholder="" name="password"/>
+                <input type="password" class="form-control" placeholder="" name="password" value="{{form.password.value|default:''}}"/>
                 <label for="registerPassword">Contraseña</label>
               </div>
               <div class="input-group-text">
@@ -117,7 +117,7 @@
             </div>
             <div class="input-group mb-1">
               <div class="form-floating">
-                <input type="password" class="form-control" placeholder="" name="repassword"/>
+                <input type="password" class="form-control" placeholder="" name="repassword" value="{{form.repassword.value|default:''}}"/>
                 <label for="registerPassword">Confirmar Contraseña</label>
               </div>
               <div class="input-group-text">

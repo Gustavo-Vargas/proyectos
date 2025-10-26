@@ -18,6 +18,6 @@ class RegistrarView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserForm
     success_url = reverse_lazy('login')
-    success_mesage = "%(username)s se ha registrado de manera exitosa"
+    success_message = "%(username)s se ha registrado de manera exitosa"
 
     

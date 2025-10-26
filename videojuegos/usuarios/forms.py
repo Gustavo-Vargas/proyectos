@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 
 class UserForm(forms.ModelForm):
-    
+    repassword = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username', 'password', 'email')
+        fields = ('username', 'password', 'email', 'repassword')
         
     def save(self, commit=True):
         user = super(UserForm, self).save(commit=False)
@@ -16,6 +16,10 @@ class UserForm(forms.ModelForm):
             user.save()
         return user
     
+    def clean_password(self, *args, **kwargs):
+        if self.data['password'] != self.data['repassword']:
+            raise forms.ValidationError('Las contraseñas son diferentes; favor de verificar.')
+        return self.data['password']
     
 
 # class LoginForm(AuthenticationForm):

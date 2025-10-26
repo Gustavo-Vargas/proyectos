@@ -84,6 +84,19 @@
               Verifica tus datos de acceso.
             </div>
           {% endif %}
+          {% if  messages%}
+            {% for message in messages %}
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                  <div class="alert alert-danger">
+                      {{message}}
+                  </div>
+              {% else %}
+                  <div class="alert alert-success">
+                      {{message}}
+                  </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
           
           <form method="post">
             {% csrf_token %}
@@ -140,7 +153,7 @@
             <a href="forgot-password.html">I forgot my password</a>
           </p>
           <p class="mb-0">
-            <a href="register.html" class="text-center"> Register a new membership </a>
+            <a href="{% url 'registrar'%}" class="text-center">Registrar nuevo usuario</a>
           </p>
         </div>
         <!-- /.login-card-body -->
