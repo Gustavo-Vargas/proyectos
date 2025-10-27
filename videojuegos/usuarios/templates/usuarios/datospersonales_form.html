@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    {{accion}} Perfil
+{% endblock titulo %}
+
+{% block page_title %}
+    {{accion}} Perfil
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'categorias_lista' %}">Perfils</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{accion}} Perfil</li>
+{% endblock breadcrumb %}
+
+
+{% block contenido %}
+    <h1>{{accion}} Perfil</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="btn btn-success" type="submit">
+
+        <a class="btn btn-danger" href="{% url 'bienvenida' %}">Cancelar</a>
+    </form> 
+{% endblock contenido %}

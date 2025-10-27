@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-
+from .models import DatosPersonales
 
 class UserForm(forms.ModelForm):
     repassword = forms.CharField(widget=forms.PasswordInput())
@@ -20,7 +20,11 @@ class UserForm(forms.ModelForm):
         if self.data['password'] != self.data['repassword']:
             raise forms.ValidationError('Las contraseñas son diferentes; favor de verificar.')
         return self.data['password']
-    
+
+class FromDatosPersonales(forms.ModelForm):
+    class Meta:
+        model = DatosPersonales
+        exclude = ['user']
 
 # class LoginForm(AuthenticationForm):
     
