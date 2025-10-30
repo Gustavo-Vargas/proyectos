@@ -282,7 +282,7 @@
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a  href="{% url 'perfil' %}" class="btn btn-default btn-flat">Perfil</a>
                   
                   <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
