@@ -24,6 +24,7 @@ class UserForm(forms.ModelForm):
 class FromDatosPersonales(forms.ModelForm):
     class Meta:
         model = DatosPersonales
+        # fields ='__all__'
         exclude = ['user']
 
 # class LoginForm(AuthenticationForm):
