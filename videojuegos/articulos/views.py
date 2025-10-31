@@ -4,18 +4,20 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
-from articulos.models import Articulos, Categoria
-from articulos.forms import FormArticulo, FormCategoria
+from articulos.models import Articulos, Categoria, ArticuloFoto
+from articulos.forms import FormArticulo, FormCategoria, ArticuloFotoFormSet
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from django.views.decorators.http import require_http_methods
 
+# Articulos
 @permission_required('add_articulos')
 def lista_articulos(request):
     articulos_list = Articulos.objects.all()
        # articulos = Articulos.objects.order_by('-stock','nombre')
     # articulos = Articulos.objects.filter(genero='1')
     
-    paginator = Paginator(articulos_list, 5)
+    paginator = Paginator(articulos_list, 10)
     page_number = request.GET.get('page')
     articulos = paginator.get_page(page_number)
 
@@ -50,8 +52,32 @@ def editar_articulos(request, id):
     else: 
         form = FormArticulo(instance=articulo)
     return render(request, 'editar_articulo.html', {'form':form})
+ 
+
+@require_http_methods(["GET", "POST"])
+def gestionar_fotos_articulo(request, id):
+    articulo = Articulos.objects.get(id=id)
+    if request.method == 'POST':
+        formset = ArticuloFotoFormSet(request.POST, request.FILES, instance=articulo, queryset=ArticuloFoto.objects.none())
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, 'Fotos actualizadas con éxito.')
+            return redirect('gestionar_fotos_articulo', id=articulo.id)
+    else:
+        formset = ArticuloFotoFormSet(instance=articulo, queryset=ArticuloFoto.objects.none())
+    return render(request, 'articulos/gestionar_fotos.html', {'articulo': articulo, 'formset': formset})
+
+@require_http_methods(["POST"])
+def eliminar_foto_articulo(request, id, foto_id):
+    articulo = Articulos.objects.get(id=id)
+    foto = articulo.fotos.get(id=foto_id)
+    foto.delete()
+    messages.success(request, 'Foto eliminada con éxito.')
+    return redirect('gestionar_fotos_articulo', id=articulo.id)
+
     
 
+# Categorias
 def lista_categorias(request):
     categorias = Categoria.objects.all()
 

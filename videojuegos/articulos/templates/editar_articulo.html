@@ -33,8 +33,15 @@
 <form method="POST">
     {% csrf_token %}
     {{form.as_p}}
-    <input class="btn btn-success" type="submit" value="Guardar">
-    <a class="btn btn-danger" href="{% url 'articulos_lista' %}">Regresar</a>
+    <div class="mt-4 d-flex justify-content-between">
+        <div>
+            <input class="btn btn-success" type="submit" value="Guardar">
+            <a class="btn btn-danger" href="{% url 'articulos_lista' %}">Regresar</a>
+        </div>
+        {% if form.instance.pk %}
+        <a class="btn btn-outline-info" href="{% url 'gestionar_fotos_articulo' form.instance.id %}">Gestionar fotos</a>
+        {% endif %}
+    </diV>
 </form> 
 
 {% endblock contenido %}

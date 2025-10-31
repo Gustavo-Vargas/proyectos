@@ -1,6 +1,8 @@
 from django import forms
 from articulos.models import Articulos
 from articulos.models import Categoria
+from articulos.models import ArticuloFoto
+from django.forms import inlineformset_factory
 
 class FormArticulo(forms.ModelForm):
     class Meta:
@@ -34,3 +36,23 @@ class FormCategoria(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
+
+
+class ArticuloFotoForm(forms.ModelForm):
+    class Meta:
+        model = ArticuloFoto
+        fields = ['imagen']
+        widgets = {
+            'imagen': forms.ClearableFileInput(attrs={'class': 'form-control', 'multiple': False}),
+        }
+
+
+ArticuloFotoFormSet = inlineformset_factory(
+    Articulos,
+    ArticuloFoto,
+    form=ArticuloFotoForm,
+    fields=['imagen'],
+    extra=1,
+    can_delete=False,
+    max_num=10,
+)

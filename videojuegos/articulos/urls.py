@@ -8,6 +8,8 @@ urlpatterns = [
     path('articulos/nuevo', views.nuevo_articulo, name='nuevo_articulo'),
     path('articulos/eliminar/<int:id>', views.eliminar_articulos, name='eliminar_articulos'),
     path('articulos/editar/<int:id>', views.editar_articulos, name='editar_articulos'),
+    path('articulos/<int:id>/fotos', views.gestionar_fotos_articulo, name='gestionar_fotos_articulo'),
+    path('articulos/<int:id>/fotos/<int:foto_id>/eliminar', views.eliminar_foto_articulo, name='eliminar_foto_articulo'),
 
     # Clase basada en funcion   # Tarea
     # path('categorias/', views.lista_categorias, name='categorias_lista'),

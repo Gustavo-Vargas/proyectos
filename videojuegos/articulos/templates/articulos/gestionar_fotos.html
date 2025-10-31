@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Gestionar fotos{% endblock titulo %}
+
+{% block page_title %}
+  Gestionar fotos
+{% endblock page_title %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'articulos_lista' %}">Artículos</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Fotos</li>
+{% endblock breadcrumb %}
+
+{% block contenido %}
+<section class="content">
+  <div class="container-fluid">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-success{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row">
+      <div class="col-12 col-lg-10 mx-auto">
+        <div class="card">
+          <div class="card-header d-flex align-items-center">
+            <h3 class="card-title mb-0">Fotos de {{ articulo.nombre }}</h3>
+            <a href="{% url 'articulos_lista' %}" class="btn btn-secondary btn-sm ms-auto">Volver</a>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data" novalidate id="fotos-form">
+              {% csrf_token %}
+              {{ formset.management_form }}
+
+              <div class="row g-3" id="uploads-container">
+                {% for form in formset %}
+                  <div class="col-12 col-md-6 col-lg-4 upload-item">
+                    <div class="border rounded p-3 h-100 d-flex align-items-center gap-2">
+                      <div class="flex-grow-1">{{ form.imagen }}</div>
+                      <button type="button" class="btn btn-outline-secondary btn-sm remove-upload" title="Cerrar">×</button>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <template id="empty-form-template">
+                <div class="col-12 col-md-6 col-lg-4 upload-item">
+                  <div class="border rounded p-3 h-100 d-flex align-items-center gap-2">
+                    <div class="flex-grow-1">
+                      {{ formset.empty_form.imagen.as_widget }}
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm remove-upload" title="Cerrar">×</button>
+                  </div>
+                </div>
+              </template>
+
+              <div class="mt-4 d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" id="add-upload" class="btn btn-outline-primary">Agregar archivo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {% if articulo.fotos.all %}
+        <div class="card mt-4">
+          <div class="card-header"><h3 class="card-title mb-0">Galería</h3></div>
+          <div class="card-body">
+            <div class="row g-3">
+              {% for foto in articulo.fotos.all %}
+                <div class="col-6 col-md-4 col-lg-3">
+                  <div class="border rounded p-2 h-100 d-flex flex-column">
+                    <img src="{{ foto.imagen.url }}" class="img-fluid rounded mb-2" alt="foto" />
+                    <form method="post" action="{% url 'eliminar_foto_articulo' articulo.id foto.id %}" class="mt-auto">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger w-100">Eliminar</button>
+                    </form>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="col-12 text-secondary">Sin fotos cargadas.</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <script>
+  (function(){
+    const container = document.getElementById('uploads-container');
+    const addBtn = document.getElementById('add-upload');
+    const totalInput = document.querySelector('input[name$="-TOTAL_FORMS"]');
+    const template = document.getElementById('empty-form-template');
+
+    function reindex(){
+      const items = container.querySelectorAll('.upload-item');
+      items.forEach((item, idx) => {
+        item.querySelectorAll('input').forEach(inp => {
+          ['name','id'].forEach(attr => {
+            if (inp.hasAttribute(attr)) {
+              inp.setAttribute(attr, inp.getAttribute(attr).replace(/fotos-(?:__prefix__|\d+)-/g, `fotos-${idx}-`));
+            }
+          });
+        });
+      });
+      if(totalInput){ totalInput.value = items.length; }
+    }
+
+    function addUpload(){
+      const clone = document.importNode(template.content, true);
+      container.appendChild(clone);
+      reindex();
+    }
+
+    container.addEventListener('click', function(e){
+      if(e.target && e.target.classList.contains('remove-upload')){
+        const item = e.target.closest('.upload-item');
+        if(item){
+          item.remove();
+          reindex();
+        }
+      }
+    });
+
+    if(addBtn){ addBtn.addEventListener('click', addUpload); }
+
+    if(container.children.length === 0){
+      addUpload();
+    } else {
+      reindex();
+    }
+  })();
+  </script>
+{% endblock contenido %}
+
+
