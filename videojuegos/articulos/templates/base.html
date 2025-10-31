@@ -745,11 +745,17 @@
         scrollbarAutoHide: 'leave',
         scrollbarClickScroll: true,
       };
+      
       document.addEventListener('DOMContentLoaded', function () {
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-
-        // Disable OverlayScrollbars on mobile devices to prevent touch interference
+        const bodyElement = document.body;
+        const sidebar = document.querySelector('.app-sidebar');
         const isMobile = window.innerWidth <= 992;
+        
+        if (isMobile && sidebar) {
+          bodyElement.classList.remove('sidebar-open');
+          bodyElement.classList.add('sidebar-collapse');
+        }
 
         if (
           sidebarWrapper &&
@@ -764,6 +770,18 @@
             },
           });
         }
+
+        window.addEventListener('resize', function () {
+          const currentIsMobile = window.innerWidth <= 992;
+          
+          if (currentIsMobile && bodyElement.classList.contains('sidebar-open')) {
+            bodyElement.classList.remove('sidebar-open');
+            bodyElement.classList.add('sidebar-collapse');
+          } else if (!currentIsMobile && bodyElement.classList.contains('sidebar-collapse')) {
+            bodyElement.classList.remove('sidebar-collapse');
+            bodyElement.classList.add('sidebar-open');
+          }
+        });
       });
     </script>
     <!--end::OverlayScrollbars Configure-->
