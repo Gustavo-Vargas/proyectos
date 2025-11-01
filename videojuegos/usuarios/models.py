@@ -8,6 +8,6 @@ class DatosPersonales(models.Model):
     direccion = models.CharField("Dirección", max_length=150)
     telefono = models.CharField("Teléfono", max_length=10)
     foto = models.ImageField(upload_to='perfil')
-    user = models.OneToOneField(User, verbose_name="Usuario", on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(User, verbose_name="Usuario", related_name='datos', on_delete=models.DO_NOTHING)
     
     

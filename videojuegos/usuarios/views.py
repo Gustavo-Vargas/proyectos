@@ -30,10 +30,8 @@ class CrearPerfilView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        try:
-            kwargs['instance'] = DatosPersonales.objects.get(user=self.request.user)
-        except DatosPersonales.DoesNotExist:
-            pass
+        if hasattr(self.request.user, 'datos'):
+            kwargs['instance'] = self.request.user.datos
         return kwargs
 
     def form_valid(self, form):

@@ -51,6 +51,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -118,9 +119,11 @@ STATICFILES_DIRS = (
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-LOGIN_URL = reverse_lazy('login')
+# WEB_SERVICE = 'httpssssss'
+
+LOGIN_URL = reverse_lazy('usuarios:login')
 LOGIN_REDIRECT_URL = reverse_lazy('bienvenida')
-LOGOUT_REDIRECT_URL = reverse_lazy('login')
+LOGOUT_REDIRECT_URL = reverse_lazy('usuarios:login')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
