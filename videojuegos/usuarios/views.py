@@ -1,15 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
-# from .froms import LoginForm
-from django.views.generic import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from .forms import FromDatosPersonales, UserForm
 from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from .models import DatosPersonales
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMessage
+from django.views.generic import TemplateView
+from django.contrib import messages
 
+from .models import DatosPersonales
+from .forms import FromDatosPersonales, UserForm
+from .token import token_activacion
 
 class LoginView(LoginView):
     template_name = 'login.html'
@@ -19,10 +25,63 @@ class LoginView(LoginView):
 class RegistrarView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('usuarios:login')
     success_message = "%(username)s se ha registrado de manera exitosa"
+    
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+        
+        sitio = get_current_site(self.request)
+        
+        uid = urlsafe_base64_encode(force_bytes(user.id))
+        token = token_activacion.make_token(user)
+        mensaje = render_to_string(
+            'confirmar_cuenta.html',
+            {
+                'user': user,
+                'sitio': sitio,
+                'uid': uid,
+                'token': token
+            }
+        )
+        
+        asunto = 'Activar cuenta'
+        para = user.email
+        email = EmailMessage(
+            asunto,
+            mensaje,
+            to=[para],
+        )
+        email.content_subtype = 'html'
+        email.send()
+        
+        return super().form_valid(form)
+    
+class ActivarCuentaView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        
+        try:
+            uid = urlsafe_base64_decode(kwargs['uidb64']) 
+            token = kwargs['token']
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, User.DoesNotExist):
+           user = None
+        
+        if user is not None and token_activacion.check_token(user, token):
+            user.is_active = True
+            user.save()
+            
+            messages.success(request, 'Cuenta activada, ingresar datos')
+        
+        else:
+            messages.error(request, 'Token invalido, contacta al administrador')
+        
+        return redirect('usuarios:login')
+        
 
-class CrearPerfilView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class CrearPerfilView(SuccessMessageMixin, CreateView):
     model = DatosPersonales
     form_class = FromDatosPersonales
     success_url = reverse_lazy('bienvenida')
