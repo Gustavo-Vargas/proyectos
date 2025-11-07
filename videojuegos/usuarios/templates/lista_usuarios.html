@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Lista de Usuarios
+{% endblock titulo %}
+
+{% block page_title %}
+    Lista de Usuarios
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Lista de Usuarios</li>
+{% endblock breadcrumb %}
+
+
+{% block contenido %}
+    <h1>Lista de Usuarios</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="alert alert-danger">
+                    {{message}}
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre de usuario</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>RFC</th>
+                <th>CURP</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in object_list %}
+                <tr>
+                    <td>{{usuario.username}}</td>
+                    <td>{{usuario.first_name}}</td>
+                    <td>{{usuario.last_name}}</td>
+                    <td>{{usuario.datos.rfc}}</td>
+                    <td>{{usuario.datos.curp}}</td>
+                    
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm" href="">Editar</a>
+                        <button type="button" class="btn btn-outline-success btn-sm" 
+                            data-usuario="{{usuario.id}}" onclick="asignaUsuario('{{usuario.id}}')"
+                            data-bs-toggle="modal" data-bs-target="#modal-grupos">
+                           Grupos
+                        </button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">
+                        <p>No existen usuarios registradas</p>
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="modal-grupos">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Asignar Grupos</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'usuarios:asignar_grupos' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {% for grupo in grupos %}
+                        <p> 
+                            <input type="checkbox" name="{{grupo.id}}"> {{grupo.name}}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="usuario" id="idUsuario">
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Asignar Grupos</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock contenido %}
+
+{% block scripts %}
+    <script src="{% static 'js/funciones.js' %}"></script>
+{% endblock scripts %}

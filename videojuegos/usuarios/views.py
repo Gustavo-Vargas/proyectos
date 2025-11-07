@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -12,10 +12,39 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from django.views.generic import TemplateView
 from django.contrib import messages
+from django.views.generic import ListView
 
 from .models import DatosPersonales
 from .forms import FromDatosPersonales, UserForm
 from .token import token_activacion
+
+class ListaUsuariosView(ListView):
+    model = User
+    template_name = 'lista_usuarios.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ListaUsuariosView, self).get_context_data(**kwargs)    
+        context['grupos'] = Group.objects.all()
+        return context
+    
+        # kwargs.setdefault("view", self)
+        # if self.extra_context is not None:
+        #     kwargs.update(self.extra_context)
+        # return kwargs
+
+def asignar_grupos(request):
+    id_usuario = request.POST.get('usuario', None)
+    usuario = User.objects.get(id=id_usuario)
+    
+    usuario.groups.clear()
+    for item in request.POST:
+        if request.POST[item] == 'on':
+            grupo = Group.objects.get(id=int(item))
+            usuario.groups.add(grupo)
+    
+    messages.success(request, 'Se agregó el usuario a los grupos')
+        
+    return redirect('usuarios:lista')
 
 class LoginView(LoginView):
     template_name = 'login.html'

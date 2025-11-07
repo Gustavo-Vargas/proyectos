@@ -10,5 +10,7 @@ urlpatterns = [
     path('entrar', views.LoginView.as_view(), name='login'),
     path('registrar', views.RegistrarView.as_view(), name='registrar'),
     path('perfil/', views.CrearPerfilView.as_view(), name='perfil'),
+    path('lista/', views.ListaUsuariosView.as_view(), name='lista'),
+    path('grupos/', views.asignar_grupos, name='asignar_grupos'),
     path('activar/<uidb64>/<token>/', views.ActivarCuentaView.as_view(), name='activar'),
 ]
