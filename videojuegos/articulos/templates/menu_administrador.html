@@ -1,0 +1,23 @@
+<li class="nav-item">
+  <a href="#" class="nav-link">
+    <i class="nav-icon bi bi-clipboard-fill"></i>
+    <p>
+      Artículos
+      <i class="nav-arrow bi bi-chevron-right"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{% url 'articulos_lista' %}" class="nav-link">
+        <i class="nav-icon bi bi-circle"></i>
+        <p>Lista</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'nuevo_articulo' %}" class="nav-link">
+        <i class="nav-icon bi bi-circle"></i>
+        <p>Nuevo</p>
+      </a>
+    </li>
+  </ul>
+</li>

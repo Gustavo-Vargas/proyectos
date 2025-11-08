@@ -347,31 +347,13 @@
               data-accordion="false"
               id="navigation"
             >
+              {{request.user.groups.all.0.name}}
+              {% for grupo in request.user.groups.all %}
+                {% if 'administradores' == grupo.name %}
+                  {% include 'menu_administrador.html' %}
+                {% endif %}
+              {% endfor %}
               
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-clipboard-fill"></i>
-                  <p>
-                    Artículos
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{% url 'articulos_lista' %}" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Lista</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{% url 'nuevo_articulo' %}" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Nuevo</p>
-                    </a>
-                  </li>
-                  
-                </ul>
-              </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-tree-fill"></i>
@@ -395,7 +377,7 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" style="display:none">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-pencil-square"></i>
                   <p>
@@ -689,7 +671,7 @@
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   {% block breadcrumb %}
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Dashboard v3</li>
                   {% endblock breadcrumb %}
                 </ol>
