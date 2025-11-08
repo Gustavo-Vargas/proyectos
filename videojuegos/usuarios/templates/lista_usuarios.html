@@ -54,8 +54,11 @@
                     
                     <td>
                         <a class="btn btn-outline-primary btn-sm" href="">Editar</a>
-                        <button type="button" class="btn btn-outline-success btn-sm" 
-                            data-usuario="{{usuario.id}}" onclick="asignaUsuario('{{usuario.id}}')"
+                        <button type="button" 
+                            onclick="asignaUsuario('{{usuario.id}}', '{% for g in usuario.groups.all %}{{g.id}}-{% endfor %}')"
+                            class="btn btn-outline-success btn-sm" 
+                            data-usuario="{{usuario.id}}"  
+                            data-grupos="{% for g in usuario.groups.all %}{{g.id}}-{% endfor %}" 
                             data-bs-toggle="modal" data-bs-target="#modal-grupos">
                            Grupos
                         </button>
@@ -79,7 +82,7 @@
                     <h4 class="modal-title">Asignar Grupos</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{% url 'usuarios:asignar_grupos' %}" method="post">
+                <form id="formGrupos" action="{% url 'usuarios:asignar_grupos' %}" method="post">
                     {% csrf_token %}
                     <div class="modal-body">
                         {% for grupo in grupos %}
