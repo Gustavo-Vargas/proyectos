@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Ventas
+{% endblock %}
+{% block titulo %}
+    Historial de ventas
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Ventas</li>
+{% endblock %}
+
+{% block contenido %}
+<section class="container py-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form method="get" class="row g-3 mb-4">
+                <div class="col-12 col-md-4">
+                    <label for="estado" class="form-label">Filtrar por estado</label>
+                    <select id="estado" name="estado" class="form-select" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        {% for value, label in estados %}
+                        <option value="{{ value }}" {% if value == estado_actual %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+
+            {% if ventas %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Artículos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venta in ventas %}
+                        <tr>
+                            <td>#{{ venta.id }}</td>
+                            <td>{{ venta.cliente.get_full_name|default:venta.cliente.username }}</td>
+                            <td>${{ venta.total|floatformat:2 }}</td>
+                            <td>
+                                {% if venta.estado == 'pendiente' %}
+                                    <span class="badge text-bg-warning">{{ venta.get_estado_display }}</span>
+                                {% elif venta.estado == 'pagada' %}
+                                    <span class="badge text-bg-success">{{ venta.get_estado_display }}</span>
+                                {% elif venta.estado == 'cancelada' %}
+                                    <span class="badge text-bg-danger">{{ venta.get_estado_display }}</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">{{ venta.get_estado_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ venta.creada_en|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <ul class="list-unstyled mb-0">
+                                    {% for detalle in venta.detalles.all %}
+                                    <li>{{ detalle.articulo.nombre }} × {{ detalle.cantidad }} — ${{ detalle.subtotal|floatformat:2 }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <div class="text-center py-5 text-secondary">
+                No hay ventas registradas todavía.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

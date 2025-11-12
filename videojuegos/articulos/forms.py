@@ -15,6 +15,7 @@ class FormArticulo(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'genero': forms.Select(attrs={'class': 'form-control'}),
             'categoria': forms.Select(attrs={'class': 'form-control'}),
         }

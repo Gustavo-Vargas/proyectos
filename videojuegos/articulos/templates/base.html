@@ -6,9 +6,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>
-      {% block titulo %}
+      {% block page_title %}
         Videojuego V1
-      {% endblock titulo %}
+      {% endblock page_title %}
     </title>
 
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
@@ -231,6 +231,16 @@
             </li>
             <!--end::Notifications Dropdown Menu-->
 
+            <!--begin::Cart-->
+            <li class="nav-item">
+              <a class="nav-link position-relative" href="{% url 'carrito_resumen' %}">
+                <i class="bi bi-cart3"></i>
+                {% cart_count as total_carrito %}
+                <span class="navbar-badge badge text-bg-success">{{ total_carrito }}</span>
+              </a>
+            </li>
+            <!--end::Cart-->
+
             <!--begin::Fullscreen Toggle-->
             <li class="nav-item">
               <a class="nav-link" href="#" data-lte-toggle="fullscreen">
@@ -282,19 +292,20 @@
                 <!--end::User Image-->
                 <!--begin::Menu Body-->
                 <li class="user-body">
-                  <!--begin::Row-->
-                  <div class="row">
-                    <div class="col-4 text-center">
-                      <a href="#">Followers</a>
+                  {% if request.user.groups.exists %}
+                    <div class="text-center mb-2">
+                      <strong>Grupos asignados</strong>
                     </div>
-                    <div class="col-4 text-center">
-                      <a href="#">Sales</a>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                      {% for grupo in request.user.groups.all %}
+                        <span class="badge text-bg-secondary fw-normal">{{ grupo.name|capfirst }}</span>
+                      {% endfor %}
                     </div>
-                    <div class="col-4 text-center">
-                      <a href="#">Friends</a>
+                  {% else %}
+                    <div class="text-center text-secondary">
+                      <span>Sin grupos asignados</span>
                     </div>
-                  </div>
-                  <!--end::Row-->
+                  {% endif %}
                 </li>
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
@@ -348,15 +359,6 @@
               data-accordion="false"
               id="navigation"
             >
-
-            {% if user|pertenece_grupo:'administradores' %}
-              pertenece a administrador
-            {% elif user|pertenece_grupo:'clientes' %}
-              pertenece a cliente
-
-            {% endif %}
-
-              {{request.user.groups.all.0.name}}
               {% for grupo in request.user.groups.all %}
                 {% if 'administradores' == grupo.name %}
                   {% include 'menu_administrador.html' %}
@@ -365,7 +367,7 @@
               
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-tree-fill"></i>
+                  <i class="nav-icon bi bi-tags-fill"></i>
                   <p>
                     Categorias
                     <i class="nav-arrow bi bi-chevron-right"></i>
@@ -386,273 +388,18 @@
                   </li>
                 </ul>
               </li>
-              <li class="nav-item" style="display:none">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-pencil-square"></i>
-                  <p>
-                    Forms
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./forms/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>General Elements</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
+              
+              <li class="nav-header">Tienda</li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-table"></i>
-                  <p>
-                    Tables
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./tables/simple.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Simple Tables</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header">EXAMPLES</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                  <p>
-                    Auth
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        Version 1
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        Version 2
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./examples/lockscreen.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Lockscreen</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-header">DOCUMENTATIONS</li>
-              <li class="nav-item">
-                <a href="./docs/introduction.html" class="nav-link">
-                  <i class="nav-icon bi bi-download"></i>
-                  <p>Installation</p>
+                <a href="{% url 'articulos_tienda' %}" class="nav-link">
+                  <i class="nav-icon bi bi-controller"></i>
+                  <p>Articulos</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./docs/layout.html" class="nav-link">
-                  <i class="nav-icon bi bi-grip-horizontal"></i>
-                  <p>Layout</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/color-mode.html" class="nav-link">
-                  <i class="nav-icon bi bi-star-half"></i>
-                  <p>Color Mode</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-ui-checks-grid"></i>
-                  <p>
-                    Components
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/components/main-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Header</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./docs/components/main-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Sidebar</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-filetype-js"></i>
-                  <p>
-                    Javascript
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/javascript/treeview.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Treeview</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/browser-support.html" class="nav-link">
-                  <i class="nav-icon bi bi-browser-edge"></i>
-                  <p>Browser Support</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/how-to-contribute.html" class="nav-link">
-                  <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                  <p>How To Contribute</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/faq.html" class="nav-link">
-                  <i class="nav-icon bi bi-question-circle-fill"></i>
-                  <p>FAQ</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/license.html" class="nav-link">
-                  <i class="nav-icon bi bi-patch-check-fill"></i>
-                  <p>License</p>
-                </a>
-              </li>
-
-              <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>
-                    Level 1
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>
-                        Level 2
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
-                </a>
-              </li>
-
-              <li class="nav-header">LABELS</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-danger"></i>
-                  <p class="text">Important</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-warning"></i>
-                  <p>Warning</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-info"></i>
-                  <p>Informational</p>
+                <a href="{% url 'carrito_resumen' %}" class="nav-link">
+                  <i class="nav-icon bi bi-cart-fill"></i>
+                  <p>Carrito</p>
                 </a>
               </li>
             </ul>
@@ -672,9 +419,9 @@
             <div class="row">
               <div class="col-sm-6">
                 <h3 class="mb-0">
-                  {% block page_title %}
+                  {% block titulo %}
                     Dashboard v3
-                  {% endblock page_title %}
+                  {% endblock titulo %}
                 </h3>
               </div>
               <div class="col-sm-6">
@@ -706,6 +453,7 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
+      <div class="toast-container position-fixed top-0 end-0 p-3" id="app-toast-container"></div>
       <!--begin::Footer-->
       <footer class="app-footer">
         <!--begin::To the end-->
@@ -740,6 +488,7 @@
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{% static './js/adminlte.js' %}"></script>
+    <script src="{% static './js/funciones.js' %}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
 
     {% block scripts %}
@@ -792,6 +541,16 @@
       });
     </script>
     <!--end::OverlayScrollbars Configure-->
+
+    {% if messages %}
+    <script id="django-messages-data" type="application/json">
+    [
+      {% for message in messages %}
+      {"level":"{{ message.tags }}","text":"{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+    </script>
+    {% endif %}
 
     <!-- OPTIONAL SCRIPTS -->
 
