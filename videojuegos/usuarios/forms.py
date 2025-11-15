@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from .models import DatosPersonales
+from django.urls import reverse
 
 class UserForm(forms.ModelForm):
     repassword = forms.CharField(widget=forms.PasswordInput())
@@ -26,6 +27,16 @@ class FromDatosPersonales(forms.ModelForm):
         model = DatosPersonales
         # fields ='__all__'
         exclude = ['user']
+        
+        widgets = {
+            'estado': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['estado'].widget.attrs['data-url'] = reverse('usuarios:busca_municipios')
 
 # class LoginForm(AuthenticationForm):
     

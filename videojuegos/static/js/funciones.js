@@ -10,6 +10,27 @@ function asignaUsuario(idUsuario, grupos) {
     });
 }
 
+// El codigo espera a que la pagina temrine de cargar
+$(document).ready(function(){
+    $('#id_estado').change(function(e){
+        let token = $('[name="csrfmiddlewaretoken"]').val();
+        let url = $(this).data('url');
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {'id_estado':$(this).val(), 'csrfmiddlewaretoken': token},
+            success: function(data){
+                let html = '';
+                $.each(data, function(llave, valor){
+                    html+=`<option value="${valor.id}">${valor.nombre}</option>`
+                });
+                $('#id_municipio').html(html);
+            }
+        });
+    });
+});
+
+
 (function () {
     const typeMap = {
         success: 'success',

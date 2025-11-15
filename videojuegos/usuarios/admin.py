@@ -1,3 +1,5 @@
 from django.contrib import admin
+from usuarios.models import Estado, Municipio
 
-# Register your models here.
+admin.site.register(Estado)
+admin.site.register(Municipio)

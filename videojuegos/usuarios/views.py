@@ -13,8 +13,9 @@ from django.core.mail import EmailMessage
 from django.views.generic import TemplateView
 from django.contrib import messages
 from django.views.generic import ListView
+from django.http import JsonResponse
 
-from .models import DatosPersonales
+from .models import DatosPersonales, Municipio, Estado
 from .forms import FromDatosPersonales, UserForm
 from .token import token_activacion
 
@@ -134,4 +135,12 @@ class CrearPerfilView(SuccessMessageMixin, CreateView):
         
         return super().form_valid(form)
         
+    
+def busca_municipios(request):
+    id_estado = request.POST.get('id_estado', None)
+    if id_estado:
+        municipios = Municipio.objects.filter(estado_id=id_estado)
+        data = [{'id': mun.id, 'nombre':mun.nombre} for mun in municipios]
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'error': 'Paraetri invalido'}, safe=False)
     
