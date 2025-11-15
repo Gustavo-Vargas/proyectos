@@ -12,11 +12,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from articulos.forms import ArticuloFotoFormSet, FormArticulo, FormCategoria
 from articulos.models import ArticuloFoto, Articulos, Categoria, Venta, DetalleVenta, ESTADOS_VENTA
+from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
+import json
 
 # Articulos
 @permission_required('add_articulos')
@@ -299,6 +302,49 @@ class ListaVentasView(LoginRequiredMixin, ListView):
         context['estado_actual'] = self.request.GET.get('estado', '')
         return context
     
+
+# Grafica
+class GraficaView(LoginRequiredMixin, TemplateView):
+    template_name = "grafica.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Obtener ventas agrupadas por fecha 
+        # TruncDate convierte datetime a solo fecha (sin hora)
+        ventas_por_fecha = (
+            Venta.objects
+            .annotate(fecha=TruncDate('creada_en'))  # Agrupa por dia
+            .values('fecha')  # Selecciona solo la fecha
+            .annotate(
+                cantidad=Count('id'),  # Cuenta cuántas ventas hay ese dia
+                total=Sum('total')  # Suma el total de ventas ese dia
+            )
+            .order_by('fecha')  # Ordena por fecha ascendente
+        )
+        
+        # Preparar datos para la gráfica en formato JSON
+        fechas = []     # Labels: fechas para el eje X
+        cantidades = []   # Cantidad: número de ventas por dia
+        totales = []   # Total: monto total vendido por dia
+        
+        for venta in ventas_por_fecha:
+            # Formatear fecha como string legible (YYYY-MM-DD)
+            fecha_str = venta['fecha'].strftime('%Y-%m-%d') if venta['fecha'] else ''
+            fechas.append(fecha_str)
+            cantidades.append(venta['cantidad'])
+            # Convertir Decimal a float para JSON
+            totales.append(float(venta['total'] or 0))
+        
+        # Pasar datos al template
+        context['fechas'] = json.dumps(fechas)  # JSON para JavaScript
+        context['cantidades'] = json.dumps(cantidades)
+        context['totales'] = json.dumps(totales)
+        context['ventas_por_fecha'] = ventas_por_fecha  # QuerySet para mostrar tabla opcional
+        context['datos'] = ventas_por_fecha  # QuerySet para mostrar datos crudos (debug)
+        
+        return context
+
 
 # Categorias
 def lista_categorias(request):

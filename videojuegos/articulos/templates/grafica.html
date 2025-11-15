@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Gráfica de Ventas
+{% endblock titulo %}
+
+{% block page_title %}
+    Gráfica de Ventas
+{% endblock page_title %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'bienvenida' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'ventas_lista' %}">Ventas</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Gráfica</li>
+{% endblock breadcrumb %}
+
+{% block contenido %}
+   
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Gráfica de Ventas por Fecha</h3>
+        </div>
+        <div class="card-body">
+            <div id="grafica" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
+        </div>
+    </div>
+
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting-data.js"></script>
+    <script>
+        // Parsear los datos JSON que vienen de Django
+        const fechas = {{ fechas| safe }};
+        const cantidades = {{ cantidades| safe }};
+        
+        // Crear la gráfica con Highcharts
+        Highcharts.chart('grafica', {
+            lang: {
+                dowloadCSV: "Descarga CSV",
+                dowloadJPEG: "Descarga imagen en JPEG",
+                dowloadPDF: "Descarga PDF",
+                dowloadPNG: "Descarga imagen en PNG",
+                dowloadSVG: "Descarga imagen en SVG",
+                viewFullScreen: "Ver en pantalla completa",
+                printChart: "Imprimir Grafica"
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Gráfica de Ventas'
+            },
+            subtitle: {
+                text: 'Cantidad de ventas realizadas por fecha'
+            },
+            xAxis: {
+                categories: fechas, 
+                title: {
+                    text: 'Fecha'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Ventas'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{  
+                name: 'Ventas',
+                data: cantidades  
+            }],
+            credits: {
+                enabled: false
+            }
+        });
+    </script>
+{% endblock contenido %}

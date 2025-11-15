@@ -19,6 +19,7 @@ urlpatterns = [
     path('articulos/carrito/finalizar', views.finalizar_compra, name='carrito_finalizar'),
     
     path('ventas/', views.ListaVentasView.as_view(), name='ventas_lista'),
+    path('ventas/grafica', views.GraficaView.as_view(), name='ventas_grafica'),
     
     # Clase basada en funcion   # Tarea
     # path('categorias/', views.lista_categorias, name='categorias_lista'),
