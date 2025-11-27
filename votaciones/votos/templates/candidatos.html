@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-    Lista de Partido
+    Lista de Candidatos
 {% endblock titulo %}
 
 {% block contenido %}
@@ -24,38 +24,32 @@
     <thead>
         <tr>
             <th>Foto</th>
-            <th>Nombre</th>
-            <th>Descripcion</th>
+            <th>Nombre Completo</th>
+            <th>Partido</th>
             <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
-        {% for partido in partidos %}
+        {% for candidato in candidatos %}
             <tr>
                 <td>
-                    {% if partido.foto %}
-                        <img src="{{ partido.foto.url }}" alt="{{ partido.nombre }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                    {% if candidato.foto %}
+                        <img src="{{ candidato.foto.url }}" alt="{{ candidato }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px; object-fit: cover;">
                     {% else %}
                         <span class="text-muted">Sin foto</span>
                     {% endif %}
                 </td>
-                <td>{{partido.nombre}}</td>
+                <td>{{ candidato.nombre }} {{ candidato.ap_paterno }} {{ candidato.ap_materno }}</td>
+                <td>{{ candidato.partido.nombre }}</td>
                 <td>
-                    {% if partido.descripcion %}
-                        {{partido.descripcion}}
-                    {% else %}
-                        No cuenta con Descripcion
-                    {% endif %}
-                </td>
-                <td>
-                    <a class="btn btn-outline-primary btn-sm" href="{% url 'editar_partido' partido.id %}">Editar</a>
-                    <a class="btn btn-outline-warning btn-sm" href="{% url 'eliminar_partido' partido.id %}">Eliminar</a>
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'editar_candidato' candidato.id %}">Editar</a>
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'eliminar_candidato' candidato.id %}">Eliminar</a>
                 </td>
             </tr>
         {% empty %}
             <tr>
                 <td colspan="4">
-                    No existen partidos registrados
+                    No existen candidatos registrados
                 </td>
             </tr>
         {% endfor %}
@@ -63,3 +57,4 @@
 </table>
 
 {% endblock contenido %}
+

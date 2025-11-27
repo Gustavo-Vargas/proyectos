@@ -380,6 +380,29 @@
                 </ul>
               </li>
               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-tags-fill"></i>
+                  <p>
+                    Candidatos
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'candidatos_lista' %}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Lista</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{% url 'nuevo_candidato' %}" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Nuevo</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
                 {% comment %} <a href="{% url 'usuarios:lista' %}" class="nav-link">
                   <i class="nav-icon bi bi-people-fill"></i>
                   <p>Usuarios</p>
