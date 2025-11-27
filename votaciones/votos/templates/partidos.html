@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Lista de Partido
+{% endblock titulo %}
+
+{% block contenido %}
+
+{% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="alert alert-danger">
+                    {{message}}
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    {{message}}
+                </div>
+            {% endif %}
+        {% endfor %}
+{% endif %}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for partido in partidos %}
+            <tr>
+                <td>{{partido.foto}}</td>
+                <td>{{partido.nombre}}</td>
+                <td>
+                    {% if partido.descripcion %}
+                        {{partido.descripcion}}
+                    {% else %}
+                        No cuenta con Descripcion
+                    {% endif %}
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'editar_partido' partido.id %}">Editar</a>
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'eliminar_partido' partido.id %}">Eliminar</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">
+                    No existen partidos registrados
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock contenido %}

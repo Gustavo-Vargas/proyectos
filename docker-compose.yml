@@ -7,10 +7,12 @@ services:
     #restart: always
     depends_on:
       - db-videojuegos
+      - db-votaciones
     ports:
       - 8000:8000
+      - 8001:8001
     volumes:
-      - ./videojuegos/:/app
+      - ./:/app
     
   db-videojuegos:
     image: mariadb
@@ -26,5 +28,21 @@ services:
     ports:
       - 3320:3306
 
+  db-votaciones:
+    image: mariadb
+    container_name: votaciones-db
+    #restart: always
+    environment:
+      MYSQL_DATABASE: votaciones
+      MYSQL_USER: votaciones
+      MYSQL_PASSWORD: votaciones123
+      MYSQL_ROOT_PASSWORD: admin1234
+    volumes:
+      - db-votaciones:/var/lib/mysql
+    ports:
+      - 3310:3306
+
 volumes:
   db-videojuegos:
+  db-votaciones:
+
