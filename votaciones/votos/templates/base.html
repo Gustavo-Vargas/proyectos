@@ -1,4 +1,6 @@
 {% load static %}
+{% load permisos_grupo %}
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
@@ -354,57 +356,32 @@
               id="navigation"
             >
               {% for grupo in request.user.groups.all %}
-                {% if 'administradores' == grupo.name %}
+                {% if 'administradores' == grupo.name|lower or 'administrativos' == grupo.name|lower %}
                   {% include 'menu_administrador.html' %}
                 {% endif %}
               {% endfor %} 
               
+              <li class="nav-header">Navegación</li>
+              
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'partidos_lista' %}" class="nav-link">
                   <i class="nav-icon bi bi-flag-fill"></i>
-                  <p>
-                    Partidos
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
+                  <p>Partidos</p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{% url 'partidos_lista' %}" class="nav-link">
-                      <i class="nav-icon bi bi-list-ul"></i>
-                      <p>Lista</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{% url 'nuevo_partido' %}" class="nav-link">
-                      <i class="nav-icon bi bi-plus-circle"></i>
-                      <p>Nuevo</p>
-                    </a>
-                  </li>
-                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'candidatos_lista' %}" class="nav-link">
+                  <i class="nav-icon bi bi-person-badge-fill"></i>
+                  <p>Candidatos</p>
+                </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-person-badge-fill"></i>
-                  <p>
-                    Candidatos
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
+                  <i class="nav-icon bi bi-check-square-fill"></i>
+                  <p>Votar</p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{% url 'candidatos_lista' %}" class="nav-link">
-                      <i class="nav-icon bi bi-list-ul"></i>
-                      <p>Lista</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{% url 'nuevo_candidato' %}" class="nav-link">
-                      <i class="nav-icon bi bi-plus-circle"></i>
-                      <p>Nuevo</p>
-                    </a>
-                  </li>
-                </ul>
               </li>
+              
               <li class="nav-item">
                 {% comment %} <a href="{% url 'usuarios:lista' %}" class="nav-link">
                   <i class="nav-icon bi bi-people-fill"></i>

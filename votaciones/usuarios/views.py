@@ -35,13 +35,25 @@ class ListaUsuariosView(ListView):
 
 def asignar_grupos(request):
     id_usuario = request.POST.get('usuario', None)
-    usuario = User.objects.get(id=id_usuario)
+    
+    if not id_usuario or id_usuario == '':
+        messages.error(request, 'No se seleccionó un usuario')
+        return redirect('usuarios:lista')
+    
+    try:
+        usuario = User.objects.get(id=int(id_usuario))
+    except (ValueError, User.DoesNotExist):
+        messages.error(request, 'Usuario no encontrado')
+        return redirect('usuarios:lista')
     
     usuario.groups.clear()
     for item in request.POST:
-        if request.POST[item] == 'on':
-            grupo = Group.objects.get(id=int(item))
-            usuario.groups.add(grupo)
+        if item != 'usuario' and item != 'csrfmiddlewaretoken' and request.POST[item] == 'on':
+            try:
+                grupo = Group.objects.get(id=int(item))
+                usuario.groups.add(grupo)
+            except (ValueError, Group.DoesNotExist):
+                continue
     
     messages.success(request, 'Se agregó el usuario a los grupos')
         
