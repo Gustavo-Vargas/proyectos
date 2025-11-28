@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'votos',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -116,7 +118,19 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# WEB_SERVICE = 'httpssssss'
+
+LOGIN_URL = reverse_lazy('usuarios:login')
+LOGIN_REDIRECT_URL = reverse_lazy('bienvenida')
+LOGOUT_REDIRECT_URL = reverse_lazy('usuarios:login')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smpt.gmail.com'
+EMAIL_HOST_USER = 'testing@gmail.com'
+EMAIL_HOST_PASSWORD = 'prueba123@'
+EMAIL_PORT = 587
