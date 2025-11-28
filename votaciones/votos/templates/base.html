@@ -98,10 +98,10 @@
               <a href="{% url 'bienvenida' %}" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="{% url 'partidos_lista' %}" class="nav-link">Partidos</a>
+              <a href="{% url 'partidos_publicos' %}" class="nav-link">Partidos</a>
             </li>
             <li class="nav-item d-none d-md-block">
-              <a href="{% url 'candidatos_lista' %}" class="nav-link">Candidatos</a>
+              <a href="{% url 'candidatos_publicos' %}" class="nav-link">Candidatos</a>
             </li>
           </ul>
           <!--end::Start Navbar Links-->
@@ -356,7 +356,7 @@
               id="navigation"
             >
               {% for grupo in request.user.groups.all %}
-                {% if 'administradores' == grupo.name|lower or 'administrativos' == grupo.name|lower %}
+                {% if 'administradores' == grupo.name|lower %}
                   {% include 'menu_administrador.html' %}
                 {% endif %}
               {% endfor %} 
@@ -364,13 +364,13 @@
               <li class="nav-header">Navegación</li>
               
               <li class="nav-item">
-                <a href="{% url 'partidos_lista' %}" class="nav-link">
+                <a href="{% url 'partidos_publicos' %}" class="nav-link">
                   <i class="nav-icon bi bi-flag-fill"></i>
                   <p>Partidos</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'candidatos_lista' %}" class="nav-link">
+                <a href="{% url 'candidatos_publicos' %}" class="nav-link">
                   <i class="nav-icon bi bi-person-badge-fill"></i>
                   <p>Candidatos</p>
                 </a>
@@ -406,7 +406,7 @@
             <!--begin::Row-->
             <div class="row">
               <div class="col-12">
-                <h1 class="mb-1 text-break">
+                <h2 class="mb-1 text-break">
                   {% block titulo %}
                     Votaciones
                   {% endblock titulo %}

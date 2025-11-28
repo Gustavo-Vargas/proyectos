@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+{% endblock titulo %}
+
+{% block contenido %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="mb-0">Partidos Políticos</h2>
+        <p class="text-muted">Conoce los partidos políticos registrados</p>
+    </div>
+</div>
+
+{% if partidos %}
+    <div class="row">
+        {% for partido in partidos %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <a href="{% url 'candidatos_por_partido' partido.id %}" class="text-decoration-none text-dark">
+                    <div class="card shadow-sm h-100 hover-card" style="transition: transform 0.2s; cursor: pointer;">
+                        {% if partido.foto %}
+                            <img src="{{ partido.foto.url }}" class="card-img-top" alt="{{ partido.nombre }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="bi bi-flag-fill text-white" style="font-size: 4rem;"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ partido.nombre }}</h5>
+                            {% if partido.descripcion %}
+                                <p class="card-text flex-grow-1">{{ partido.descripcion|truncatewords:20 }}</p>
+                            {% else %}
+                                <p class="card-text text-muted flex-grow-1">Sin descripción disponible</p>
+                            {% endif %}
+                            <div class="mt-auto">
+                                <small class="text-primary">
+                                    <i class="bi bi-arrow-right-circle me-1"></i>
+                                    Ver candidatos
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                No hay partidos políticos registrados
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock contenido %}
+

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from votos.models import Partido, Candidato
 from django.views.generic import TemplateView
 from votos.forms import PartidoForm, CandidatoForm
@@ -84,3 +84,20 @@ def editar_candidato(request, id):
     else: 
         form = CandidatoForm(instance=candidato)
     return render(request, 'candidato_form.html', {'form':form})
+
+# Ventanas públicas
+def partidos_publicos(request):
+    partidos = Partido.objects.all()
+    return render(request, 'partidos_publicos.html', {'partidos': partidos})
+
+def candidatos_publicos(request):
+    candidatos = Candidato.objects.select_related('partido').all()
+    return render(request, 'candidatos_publicos.html', {'candidatos': candidatos})
+
+def candidatos_por_partido(request, partido_id):
+    partido = get_object_or_404(Partido, id=partido_id)
+    candidatos = Candidato.objects.filter(partido=partido).select_related('partido')
+    return render(request, 'candidatos_por_partido.html', {
+        'partido': partido,
+        'candidatos': candidatos
+    })

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Candidatos de {{ partido.nombre }}
+{% endblock titulo %}
+
+{% block contenido %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex align-items-center mb-3 flex-wrap">
+            <a href="{% url 'partidos_publicos' %}" class="btn btn-outline-secondary me-3 mb-2 mb-md-0">
+                <i class="bi bi-arrow-left me-1"></i>
+                Volver a Partidos
+            </a>
+            {% if partido.foto %}
+                <img src="{{ partido.foto.url }}" alt="{{ partido.nombre }}" class="me-3 rounded shadow-sm mb-2 mb-md-0" style="width: 100px; height: 100px; object-fit: contain; background-color: #f8f9fa; padding: 5px;">
+            {% else %}
+                <div class="me-3 bg-secondary rounded d-flex align-items-center justify-content-center shadow-sm mb-2 mb-md-0" style="width: 100px; height: 100px;">
+                    <i class="bi bi-flag-fill text-white" style="font-size: 3rem;"></i>
+                </div>
+            {% endif %}
+            <div class="flex-grow-1">
+                <h2 class="mb-0">{{ partido.nombre }}</h2>
+                {% if partido.descripcion %}
+                    <p class="text-muted mb-0">{{ partido.descripcion }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if candidatos %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <h4>Candidatos</h4>
+        </div>
+    </div>
+    <div class="row">
+        {% for candidato in candidatos %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    {% if candidato.foto %}
+                        <img src="{{ candidato.foto.url }}" class="card-img-top" alt="{{ candidato }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-person-badge-fill text-white" style="font-size: 4rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ candidato.nombre }} {{ candidato.ap_paterno }} {{ candidato.ap_materno }}</h5>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center">
+                                {% if partido.foto %}
+                                    <img src="{{ partido.foto.url }}" alt="{{ partido.nombre }}" class="me-2" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
+                                {% else %}
+                                    <i class="bi bi-flag-fill text-primary me-2"></i>
+                                {% endif %}
+                                <span class="text-muted small">{{ partido.nombre }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Este partido no tiene candidatos registrados
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<style>
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+</style>
+
+{% endblock contenido %}
+
