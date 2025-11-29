@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from votos.models import Partido, Candidato
+from votos.models import Partido, Candidato, Votacion
 from django.views.generic import TemplateView
 from votos.forms import PartidoForm, CandidatoForm
+from django.db.models import Count
+from django.contrib import messages
 
 class BienvenidaView(TemplateView):
     template_name = 'bienvenida.html'
@@ -100,4 +102,32 @@ def candidatos_por_partido(request, partido_id):
     return render(request, 'candidatos_por_partido.html', {
         'partido': partido,
         'candidatos': candidatos
+    })
+
+def votar(request):
+    candidatos = Candidato.objects.select_related('partido').all()
+    return render(request, 'votar.html', {'candidatos': candidatos})
+
+def procesar_voto(request, candidato_id):
+    if request.method == 'POST':
+        candidato = get_object_or_404(Candidato, id=candidato_id)
+        Votacion.objects.create(candidato=candidato)
+        messages.success(request, f'¡Voto registrado exitosamente para {candidato}!')
+        return redirect('resultados')
+    return redirect('votar')
+
+def resultados(request):
+    candidatos_con_votos = (
+        Candidato.objects
+        .select_related('partido')
+        .annotate(total_votos=Count('votacion'))
+        .filter(total_votos__gt=0)
+        .order_by('-total_votos')
+    )
+    
+    total_votos = Votacion.objects.count()
+    
+    return render(request, 'resultados.html', {
+        'candidatos_con_votos': candidatos_con_votos,
+        'total_votos': total_votos
     })

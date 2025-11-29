@@ -103,6 +103,12 @@
             <li class="nav-item d-none d-md-block">
               <a href="{% url 'candidatos_publicos' %}" class="nav-link">Candidatos</a>
             </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="{% url 'votar' %}" class="nav-link">Votar</a>
+            </li>
+            <li class="nav-item d-none d-md-block">
+              <a href="{% url 'resultados' %}" class="nav-link">Resultados</a>
+            </li>
           </ul>
           <!--end::Start Navbar Links-->
           
@@ -376,9 +382,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'votar' %}" class="nav-link">
                   <i class="nav-icon bi bi-check-square-fill"></i>
                   <p>Votar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'resultados' %}" class="nav-link">
+                  <i class="nav-icon bi bi-bar-chart-fill"></i>
+                  <p>Resultados</p>
                 </a>
               </li>
               

@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+{% endblock titulo %}
+
+{% block contenido %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+            <div>
+                <h2 class="mb-1">Resultados de Votación</h2>
+                <p class="text-muted mb-0">Estadísticas de los candidatos votados</p>
+            </div>
+            <a href="{% url 'votar' %}" class="btn btn-outline-primary">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                Votar
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if total_votos > 0 %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="card-title mb-1">Total de Votos</h5>
+                            <h2 class="mb-0">{{ total_votos }}</h2>
+                        </div>
+                        <i class="bi bi-bar-chart-line-fill" style="font-size: 4rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for candidato in candidatos_con_votos %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm h-100 resultado-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start mb-3">
+                            {% if candidato.foto %}
+                                <img src="{{ candidato.foto.url }}" alt="{{ candidato }}" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-person-badge-fill text-white" style="font-size: 2.5rem;"></i>
+                                </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                <h5 class="card-title mb-1">{{ candidato.nombre }} {{ candidato.ap_paterno }} {{ candidato.ap_materno }}</h5>
+                                <div class="d-flex align-items-center mb-2">
+                                    {% if candidato.partido.foto %}
+                                        <img src="{{ candidato.partido.foto.url }}" alt="{{ candidato.partido.nombre }}" class="me-2" style="width: 20px; height: 20px; object-fit: cover; border-radius: 4px;">
+                                    {% else %}
+                                        <i class="bi bi-flag-fill text-primary me-2"></i>
+                                    {% endif %}
+                                    <span class="text-muted small">{{ candidato.partido.nombre }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Votos:</span>
+                                <strong class="fs-4">{{ candidato.total_votos }}</strong>
+                            </div>
+                            <div class="progress" style="height: 25px;">
+                                {% widthratio candidato.total_votos total_votos 100 as porcentaje %}
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" 
+                                     style="width: {{ porcentaje }}%" 
+                                     aria-valuenow="{{ porcentaje }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    {{ porcentaje }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-ol me-2"></i>
+                        Resumen de Votos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Candidato</th>
+                                    <th>Partido</th>
+                                    <th class="text-end">Votos</th>
+                                    <th class="text-end">Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for candidato in candidatos_con_votos %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <strong>{{ candidato.nombre }} {{ candidato.ap_paterno }} {{ candidato.ap_materno }}</strong>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if candidato.partido.foto %}
+                                                    <img src="{{ candidato.partido.foto.url }}" alt="{{ candidato.partido.nombre }}" class="me-2" style="width: 24px; height: 24px; object-fit: cover; border-radius: 4px;">
+                                                {% endif %}
+                                                <span>{{ candidato.partido.nombre }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong>{{ candidato.total_votos }}</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            {% widthratio candidato.total_votos total_votos 100 as porcentaje %}
+                                            <span class="badge bg-primary">{{ porcentaje }}%</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Aún no se han registrado votos. 
+                <a href="{% url 'votar' %}" class="alert-link">Sé el primero en votar</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock contenido %}
+

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Bienvenido - Sistema de Votaciones
+{% endblock titulo %}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center py-5">
+                <h1 class="display-4 mb-3">
+                    <i class="bi bi-check-circle-fill text-primary"></i>
+                    Sistema de Votaciones
+                </h1>
+                <p class="lead text-muted">
+                    Participa en el proceso electoral y conoce a los candidatos
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card shadow-sm h-100 border-primary hover-card">
+            <div class="card-header bg-primary text-white text-center">
+                <i class="bi bi-flag-fill" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center mb-3">Partidos</h5>
+                <p class="card-text text-center text-muted mb-4">
+                    Conoce los partidos políticos que participan en las elecciones
+                </p>
+                <div class="mt-auto">
+                    <a href="{% url 'partidos_publicos' %}" class="btn btn-primary w-100">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        Ver Partidos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card shadow-sm h-100 border-info hover-card">
+            <div class="card-header bg-info text-white text-center">
+                <i class="bi bi-person-badge-fill" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center mb-3">Candidatos</h5>
+                <p class="card-text text-center text-muted mb-4">
+                    Explora los candidatos y sus propuestas electorales
+                </p>
+                <div class="mt-auto">
+                    <a href="{% url 'candidatos_publicos' %}" class="btn btn-info w-100">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        Ver Candidatos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card shadow-sm h-100 border-success hover-card">
+            <div class="card-header bg-success text-white text-center">
+                <i class="bi bi-check-square-fill" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center mb-3">Votar</h5>
+                <p class="card-text text-center text-muted mb-4">
+                    Ejerce tu derecho al voto seleccionando tu candidato preferido
+                </p>
+                <div class="mt-auto">
+                    <a href="{% url 'votar' %}" class="btn btn-success w-100">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        Ir a Votar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card shadow-sm h-100 border-warning hover-card">
+            <div class="card-header bg-warning text-white text-center">
+                <i class="bi bi-bar-chart-fill" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-center mb-3">Resultados</h5>
+                <p class="card-text text-center text-muted mb-4">
+                    Consulta los resultados y estadísticas de la votación
+                </p>
+                <div class="mt-auto">
+                    <a href="{% url 'resultados' %}" class="btn btn-warning w-100">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        Ver Resultados
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}
+
