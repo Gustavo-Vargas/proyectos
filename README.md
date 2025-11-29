@@ -26,5 +26,14 @@ docker-compose up --build
 docker-compose exec app bash
 python3 manage.py migrate && python3 manage.py runserver 0:8000
 ```
+**votaciones**
+```bash
+docker-compose up --build
+docker-compose exec app bash
+cd votaciones
+python3 manage.py migrate 
+python3 manage.py runserver 0:8001
+```
 
 → http://localhost:8000
+→ http://localhost:8001
