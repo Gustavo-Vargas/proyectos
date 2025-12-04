@@ -104,5 +104,32 @@
     </div>
 </div>
 
+<!-- Nueva fila para Dashboard con Tailwind -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-lg border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body text-white text-center py-4">
+                <div class="d-flex align-items-center justify-content-center gap-4 flex-wrap">
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-speedometer2" style="font-size: 4rem; opacity: 0.9;"></i>
+                    </div>
+                    <div class="flex-grow-1 text-start">
+                        <h3 class="mb-2">Dashboard de Estadísticas</h3>
+                        <p class="mb-0 opacity-90">
+                            Visualiza estadísticas en tiempo real, gráficos interactivos y análisis detallados del proceso electoral
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-4">
+                            <i class="bi bi-arrow-right-circle me-2"></i>
+                            Ver Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock contenido %}
 

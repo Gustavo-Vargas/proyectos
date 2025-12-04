@@ -20,6 +20,7 @@ urlpatterns = [
     path('votar', views.votar, name="votar"),
     path('votar/<int:candidato_id>', views.procesar_voto, name="procesar_voto"),
     path('resultados', views.resultados, name="resultados"),
+    path('dashboard', views.dashboard, name="dashboard"),
 ]
 
 

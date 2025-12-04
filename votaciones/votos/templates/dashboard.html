@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+{% endblock titulo %}
+
+{% block contenido %}
+<!-- Header -->
+<div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+        <div>
+            <h2 class="mb-1" style="font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Dashboard de Estadísticas</h2>
+            <p class="text-muted mb-0">Vista general del sistema de votaciones en tiempo real</p>
+        </div>
+        <a href="{% url 'resultados' %}" class="btn btn-primary">
+            <i class="bi bi-bar-chart-fill me-2"></i>
+            Ver Resultados Detallados
+        </a>
+    </div>
+</div>
+
+<!-- Cards de Estadísticas con Estilos Inline -->
+<div class="row mb-4">
+    <!-- Card Total Votos -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%); border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); padding: 1.5rem; color: white; position: relative; overflow: hidden; min-height: 160px;">
+            <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background: white; opacity: 0.1; border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -1.5rem; left: -1.5rem; width: 6rem; height: 6rem; background: white; opacity: 0.05; border-radius: 50%;"></div>
+            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                <div style="flex: 1;">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Total de Votos</p>
+                    <p style="font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1;">{{ total_votos }}</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.9); font-size: 0.875rem;">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Votos registrados</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); border-radius: 1rem; padding: 1rem;">
+                    <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: white; display: block;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Total Candidatos -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7e22ce 100%); border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); padding: 1.5rem; color: white; position: relative; overflow: hidden; min-height: 160px;">
+            <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background: white; opacity: 0.1; border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -1.5rem; left: -1.5rem; width: 6rem; height: 6rem; background: white; opacity: 0.05; border-radius: 50%;"></div>
+            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                <div style="flex: 1;">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Candidatos</p>
+                    <p style="font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1;">{{ total_candidatos }}</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.9); font-size: 0.875rem;">
+                        <i class="bi bi-person-badge-fill"></i>
+                        <span>Participantes</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); border-radius: 1rem; padding: 1rem;">
+                    <i class="bi bi-person-badge-fill" style="font-size: 3rem; color: white; display: block;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Total Partidos -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%); border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); padding: 1.5rem; color: white; position: relative; overflow: hidden; min-height: 160px;">
+            <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background: white; opacity: 0.1; border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -1.5rem; left: -1.5rem; width: 6rem; height: 6rem; background: white; opacity: 0.05; border-radius: 50%;"></div>
+            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                <div style="flex: 1;">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Partidos</p>
+                    <p style="font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1;">{{ total_partidos }}</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.9); font-size: 0.875rem;">
+                        <i class="bi bi-flag-fill"></i>
+                        <span>Partidos políticos</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); border-radius: 1rem; padding: 1rem;">
+                    <i class="bi bi-flag-fill" style="font-size: 3rem; color: white; display: block;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Votos Recientes -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%); border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); padding: 1.5rem; color: white; position: relative; overflow: hidden; min-height: 160px;">
+            <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background: white; opacity: 0.1; border-radius: 50%;"></div>
+            <div style="position: absolute; bottom: -1.5rem; left: -1.5rem; width: 6rem; height: 6rem; background: white; opacity: 0.05; border-radius: 50%;"></div>
+            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+                <div style="flex: 1;">
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Últimas 24h</p>
+                    <p style="font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1;">{{ votos_recientes }}</p>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(255,255,255,0.9); font-size: 0.875rem;">
+                        <i class="bi bi-clock-fill"></i>
+                        <span>Votos recientes</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.2); border-radius: 1rem; padding: 1rem;">
+                    <i class="bi bi-clock-history" style="font-size: 3rem; color: white; display: block;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráfico de Actividad -->
+<div class="mb-4">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 0.75rem; border-radius: 0.75rem;">
+                    <i class="bi bi-graph-up-arrow text-white" style="font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h3 class="mb-0" style="font-size: 1.5rem; font-weight: 700;">Actividad de Votación</h3>
+                    <p class="text-muted mb-0" style="font-size: 0.875rem;">Últimas 24 horas</p>
+                </div>
+            </div>
+            <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-between; gap: 4px; padding: 1rem; background: linear-gradient(to top, #f9fafb 0%, transparent 100%); border-radius: 0.75rem;">
+                {% for dato in votos_por_hora %}
+                    {% widthratio dato.votos 10 100 as altura %}
+                    {% if dato.votos > 0 %}
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; position: relative;">
+                            <div style="width: 100%; background: linear-gradient(to top, #2563eb 0%, #3b82f6 50%, #60a5fa 100%); border-radius: 0.5rem 0.5rem 0 0; transition: all 0.3s; cursor: pointer; min-height: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" 
+                                 title="{{ dato.hora }}: {{ dato.votos }} votos"
+                                 style="height: {% if altura > 0 %}{{ altura }}%{% else %}8%{% endif %}; min-height: 8px;">
+                            </div>
+                            {% if forloop.counter0|divisibleby:4 %}
+                                <span style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">{{ dato.hora }}</span>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%;">
+                            <div style="width: 100%; background: #e5e7eb; border-radius: 0.5rem 0.5rem 0 0; height: 4px;"></div>
+                            {% if forloop.counter0|divisibleby:4 %}
+                                <span style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">{{ dato.hora }}</span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Top Candidatos y Votos por Partido -->
+<div class="row mb-4">
+    <!-- Top 5 Candidatos -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 0.5rem; border-radius: 0.5rem;">
+                        <i class="bi bi-trophy-fill text-white" style="font-size: 1.25rem;"></i>
+                    </div>
+                    <div>
+                        <h3 class="mb-0" style="font-size: 1.25rem; font-weight: 700;">Top 5 Candidatos</h3>
+                        <p class="text-muted mb-0" style="font-size: 0.75rem;">Candidatos más votados</p>
+                    </div>
+                </div>
+                {% if top_candidatos %}
+                    <div>
+                        {% for candidato in top_candidatos %}
+                            {% widthratio candidato.total_votos total_votos 100 as porcentaje %}
+                            <div class="mb-2 p-2 rounded border">
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if forloop.counter == 1 %}
+                                        <div class="rounded-circle bg-warning text-white fw-bold d-flex align-items-center justify-content-center" style="width: 2.5rem; height: 2.5rem;">
+                                            {{ forloop.counter }}
+                                        </div>
+                                    {% elif forloop.counter == 2 %}
+                                        <div class="rounded-circle bg-secondary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 2.5rem; height: 2.5rem;">
+                                            {{ forloop.counter }}
+                                        </div>
+                                    {% elif forloop.counter == 3 %}
+                                        <div class="rounded-circle bg-danger text-white fw-bold d-flex align-items-center justify-content-center" style="width: 2.5rem; height: 2.5rem;">
+                                            {{ forloop.counter }}
+                                        </div>
+                                    {% else %}
+                                        <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 2.5rem; height: 2.5rem;">
+                                            {{ forloop.counter }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 fw-semibold small">{{ candidato.nombre }} {{ candidato.ap_paterno }}</p>
+                                        <p class="mb-1 text-muted" style="font-size: 0.75rem;">
+                                            <i class="bi bi-flag-fill me-1"></i>
+                                            {{ candidato.partido.nombre }}
+                                        </p>
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <span class="small fw-semibold text-secondary">{{ candidato.total_votos }} votos</span>
+                                            <span class="badge bg-primary small">{{ porcentaje }}%</span>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ porcentaje }}%;" aria-valuenow="{{ porcentaje }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                        <p class="text-muted">Aún no hay votos registrados</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Votos por Partido -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 0.5rem; border-radius: 0.5rem;">
+                        <i class="bi bi-pie-chart-fill text-white" style="font-size: 1.25rem;"></i>
+                    </div>
+                    <div>
+                        <h3 class="mb-0" style="font-size: 1.25rem; font-weight: 700;">Votos por Partido</h3>
+                        <p class="text-muted mb-0" style="font-size: 0.75rem;">Distribución electoral</p>
+                    </div>
+                </div>
+                {% if votos_por_partido %}
+                    <div>
+                        {% for partido in votos_por_partido %}
+                            {% if partido.total_votos > 0 %}
+                                {% widthratio partido.total_votos total_votos 100 as porcentaje %}
+                                <div class="mb-2 p-2 rounded border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            {% if partido.foto %}
+                                                <img src="{{ partido.foto.url }}" alt="{{ partido.nombre }}" 
+                                                     class="rounded" style="width: 2.5rem; height: 2.5rem; object-fit: cover;">
+                                            {% else %}
+                                                <div class="rounded bg-success text-white d-flex align-items-center justify-content-center" style="width: 2.5rem; height: 2.5rem;">
+                                                    <i class="bi bi-flag-fill"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <span class="fw-semibold small d-block">{{ partido.nombre }}</span>
+                                                <span class="text-muted" style="font-size: 0.75rem;">{{ partido.total_votos }} votos</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="fw-bold text-success" style="font-size: 1.25rem;">{{ porcentaje }}%</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ porcentaje }}%;" aria-valuenow="{{ porcentaje }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                        <p class="text-muted">Aún no hay votos registrados</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}

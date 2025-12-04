@@ -4,6 +4,8 @@ from django.views.generic import TemplateView
 from votos.forms import PartidoForm, CandidatoForm
 from django.db.models import Count
 from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
 
 class BienvenidaView(TemplateView):
     template_name = 'bienvenida.html'
@@ -130,4 +132,51 @@ def resultados(request):
     return render(request, 'resultados.html', {
         'candidatos_con_votos': candidatos_con_votos,
         'total_votos': total_votos
+    })
+
+def dashboard(request):
+    # Estadísticas generales
+    total_votos = Votacion.objects.count()
+    total_candidatos = Candidato.objects.count()
+    total_partidos = Partido.objects.count()
+    
+    # Votos por partido
+    votos_por_partido = (
+        Partido.objects
+        .annotate(total_votos=Count('candidato__votacion'))
+        .order_by('-total_votos')
+    )
+    
+    # Top 5 candidatos
+    top_candidatos = (
+        Candidato.objects
+        .select_related('partido')
+        .annotate(total_votos=Count('votacion'))
+        .filter(total_votos__gt=0)
+        .order_by('-total_votos')[:5]
+    )
+    
+    # Votos recientes (últimas 24 horas)
+    hace_24_horas = timezone.now() - timedelta(hours=24)
+    votos_recientes = Votacion.objects.filter(fecha_hora__gte=hace_24_horas).count()
+    
+    # Votos por hora del día (últimas 24 horas)
+    votos_por_hora = []
+    for i in range(24):
+        hora_inicio = timezone.now().replace(minute=0, second=0, microsecond=0) - timedelta(hours=23-i)
+        hora_fin = hora_inicio + timedelta(hours=1)
+        count = Votacion.objects.filter(fecha_hora__gte=hora_inicio, fecha_hora__lt=hora_fin).count()
+        votos_por_hora.append({
+            'hora': hora_inicio.strftime('%H:00'),
+            'votos': count
+        })
+    
+    return render(request, 'dashboard.html', {
+        'total_votos': total_votos,
+        'total_candidatos': total_candidatos,
+        'total_partidos': total_partidos,
+        'votos_por_partido': votos_por_partido,
+        'top_candidatos': top_candidatos,
+        'votos_recientes': votos_recientes,
+        'votos_por_hora': votos_por_hora,
     })
